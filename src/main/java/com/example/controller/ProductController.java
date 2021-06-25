@@ -1,30 +1,30 @@
 package com.example.controller;
 
 import com.example.entity.Product;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.example.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class ProductController {
 
-    @GetMapping("/products")
-    public List<Product> getProducts() {
-        Product p1 = new Product();
-        p1.setId(UUID.randomUUID());
-        p1.setName("Товар");
-        p1.setDescription("Описание товара");
+    private final ProductService productService;
 
-        return Collections.singletonList(p1);
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    @GetMapping("/product")
-    public ResponseEntity getAllProducts() {
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/products")
+    public List<Product> getProducts() {
+        return productService.getAllProducts();
+    }
+
+    @PostMapping("/product")
+    public Product createProduct(@RequestBody Product product) {
+        return productService.save(product);
     }
 }
